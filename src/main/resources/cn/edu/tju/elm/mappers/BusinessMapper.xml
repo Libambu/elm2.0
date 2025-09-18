@@ -3,5 +3,87 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.tju.elm.mappers.BusinessMapper">
 
+    <resultMap id="businessResultMap" type="cn.edu.tju.elm.model.Business">
+        <result property="deleted" column="is_deleted"/>
+<!--        <result property="businessOwner" column="user_id"/>-->
+    </resultMap>
+
+    <select id="getBusinesses" resultMap="businessResultMap">
+        select * from business
+    </select>
+
+    <insert id="addBusiness">
+        insert into business(
+            'create_time',
+            'creator',
+            'is_deleted',
+            'update_time',
+            'updater',
+            'business_address',
+            'business_explain',
+            'business_img',
+            'business_name',
+            'delivery_price',
+            'order_type_id',
+            'remarks',
+            'start_price',
+            'user_id'
+        ) values (
+            #{createTime},#{creater},#{deleted},#{updateTime},#{updater},
+            #{businessAddress},#{businessExplain},#{businessImg},#{businessName},
+            #{deliveryPrice},#{orderTypeId},#{remarks},#{startPrice},#{businessOwner.id}
+        )
+    </insert>
+
+    <select id="getBusinessById" resultMap="businessResultMap">
+        select * from business
+        where #{id}=id
+    </select>
+
+    <select id="getBusinessUserIdById" resultType="java.lang.Long">
+        select user_id from business
+        where #{id}=id
+    </select>
+
+    <update id="editBusinessById">
+        UPDATE business
+        <set>
+            <if test="business.updateTime != null">update_time = #{business.updateTime},</if>
+            <if test="business.updater != null">updater = #{business.updater},</if>
+            <if test="business.isDeleted != null">is_deleted = #{business.isDeleted},</if>
+            <if test="business.businessAddress != null">business_address = #{business.businessAddress},</if>
+            <if test="business.businessExplain != null">business_explain = #{business.businessExplain},</if>
+            <if test="business.businessImg != null">business_img = #{business.businessImg},</if>
+            <if test="business.businessName != null">business_name = #{business.businessName},</if>
+            <if test="business.deliveryPrice != null">delivery_price = #{business.deliveryPrice},</if>
+            <if test="business.orderTypeId != null">order_type_id = #{business.orderTypeId},</if>
+            <if test="business.remarks != null">remarks = #{business.remarks},</if>
+            <if test="business.startPrice != null">start_price = #{business.startPrice},</if>
+            <if test="business.businessOwner.id != null">user_id = #{business.businessOwner.id},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="patchBusinessById">
+        UPDATE business
+        SET
+            update_time = #{business.updateTime},
+            updater = #{business.updater},
+            is_deleted = #{business.isDeleted},
+            business_address = #{business.businessAddress},
+            business_explain = #{business.businessExplain},
+            business_img = #{business.businessImg},
+            business_name = #{business.businessName},
+            delivery_price = #{business.deliveryPrice},
+            order_type_id = #{business.orderTypeId},
+            remarks = #{business.remarks},
+            start_price = #{business.startPrice},
+            user_id = #{business.businessOwner.id}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="dropBusinessById">
+        delete from business where id=#{id}
+    </delete>
 
 </mapper>
