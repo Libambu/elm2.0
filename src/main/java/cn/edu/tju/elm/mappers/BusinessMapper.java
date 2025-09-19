@@ -16,8 +16,6 @@ public interface BusinessMapper {
 
     Business getBusinessById(Long id);
 
-    Long getBusinessUserIdById(Long id);
-
     int editBusinessById(@Param("id") Long id, @Param("business") Business business);
 
     int patchBusinessById(@Param("id") Long id, @Param("business") Business business);

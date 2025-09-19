@@ -19,11 +19,7 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public List<Business> getBusinesses() {
-        List<Business> businesses=businessMapper.getBusinesses();
-        for (Business business : businesses) {
-            getBusinessUserId(business);
-        }
-        return businesses;
+        return businessMapper.getBusinesses();
     }
 
     @Override
@@ -33,9 +29,7 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public Business getBusinessById(Long id) {
-        Business business=businessMapper.getBusinessById(id);
-        getBusinessUserId(business);
-        return business;
+        return businessMapper.getBusinessById(id);
     }
 
     @Override
@@ -53,9 +47,4 @@ public class BusinessServiceImpl implements BusinessService {
         return businessMapper.dropBusinessById(id);
     }
 
-    private void getBusinessUserId(Business business) {
-        Long userId=businessMapper.getBusinessUserIdById(business.getId());
-        User user=userService.getUserById(userId);
-        business.setBusinessOwner(user);
-    }
 }

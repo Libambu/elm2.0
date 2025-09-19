@@ -4,53 +4,119 @@
 <mapper namespace="cn.edu.tju.elm.mappers.BusinessMapper">
 
     <resultMap id="businessResultMap" type="cn.edu.tju.elm.model.Business">
-        <result property="deleted" column="is_deleted"/>
-<!--        <result property="businessOwner" column="user_id"/>-->
+        <id property="id" column="b_id"/>
+        <result property="createTime" column="b_create_time"/>
+        <result property="creator" column="b_creator"/>
+        <result property="deleted" column="b_is_deleted"/>
+        <result property="updateTime" column="b_update_time"/>
+        <result property="updater" column="b_updater"/>
+        <result property="businessAddress" column="business_address"/>
+        <result property="businessExplain" column="business_explain"/>
+        <result property="businessImg" column="business_img"/>
+        <result property="businessName" column="business_name"/>
+        <result property="deliveryPrice" column="delivery_price"/>
+        <result property="orderTypeId" column="order_type_id"/>
+        <result property="remarks" column="remarks"/>
+        <result property="startPrice" column="start_price"/>
+        <association property="businessOwner" javaType="cn.edu.tju.core.model.User">
+            <id property="id" column="u_id"/>
+            <result property="createTime" column="u_create_time"/>
+            <result property="creator" column="u_creator"/>
+            <result property="deleted" column="u_is_deleted"/>
+            <result property="updateTime" column="u_update_time"/>
+            <result property="updater" column="u_updater"/>
+            <result property="activated" column="activated"/>
+            <result property="password" column="password"/>
+            <result property="username" column="username"/>
+        </association>
     </resultMap>
 
     <select id="getBusinesses" resultMap="businessResultMap">
-        select * from business
+        select
+            b.id as b_id,
+            b.create_time as b_create_time,
+            b.creator as b_creator,
+            b.is_deleted as b_is_deleted,
+            b.update_time as b_update_time,
+            b.updater as b_updater,
+            b.business_address,
+            b.business_explain,
+            b.business_img,
+            b.business_name,
+            b.delivery_price,
+            b.order_type_id,
+            b.remarks,
+            b.start_price,
+            u.id as u_id,
+            u.create_time as u_create_time,
+            u.creator as u_creator,
+            u.is_deleted as u_is_deleted,
+            u.update_time as u_update_time,
+            u.updater as u_updater,
+            u.activated,
+            u.password,
+            u.username
+        from business b join users u on b.user_id = u.id
     </select>
 
     <insert id="addBusiness">
         insert into business(
-            'create_time',
-            'creator',
-            'is_deleted',
-            'update_time',
-            'updater',
-            'business_address',
-            'business_explain',
-            'business_img',
-            'business_name',
-            'delivery_price',
-            'order_type_id',
-            'remarks',
-            'start_price',
-            'user_id'
+            create_time,
+            creator,
+            is_deleted,
+            update_time,
+            updater,
+            business_address,
+            business_explain,
+            business_img,
+            business_name,
+            delivery_price,
+            order_type_id,
+            remarks,
+            start_price,
+            user_id
         ) values (
-            #{createTime},#{creater},#{deleted},#{updateTime},#{updater},
+            #{createTime},#{creator},#{deleted},#{updateTime},#{updater},
             #{businessAddress},#{businessExplain},#{businessImg},#{businessName},
             #{deliveryPrice},#{orderTypeId},#{remarks},#{startPrice},#{businessOwner.id}
         )
     </insert>
 
     <select id="getBusinessById" resultMap="businessResultMap">
-        select * from business
-        where #{id}=id
-    </select>
-
-    <select id="getBusinessUserIdById" resultType="java.lang.Long">
-        select user_id from business
-        where #{id}=id
+        select
+            b.id as b_id,
+            b.create_time as b_create_time,
+            b.creator as b_creator,
+            b.is_deleted as b_is_deleted,
+            b.update_time as b_update_time,
+            b.updater as b_updater,
+            b.business_address,
+            b.business_explain,
+            b.business_img,
+            b.business_name,
+            b.delivery_price,
+            b.order_type_id,
+            b.remarks,
+            b.start_price,
+            u.id as u_id,
+            u.create_time as u_create_time,
+            u.creator as u_creator,
+            u.is_deleted as u_is_deleted,
+            u.update_time as u_update_time,
+            u.updater as u_updater,
+            u.activated,
+            u.password,
+            u.username
+        from business b join users u on b.user_id = u.id
+        where #{id}=b.id
     </select>
 
     <update id="editBusinessById">
-        UPDATE business
+        update business
         <set>
             <if test="business.updateTime != null">update_time = #{business.updateTime},</if>
             <if test="business.updater != null">updater = #{business.updater},</if>
-            <if test="business.isDeleted != null">is_deleted = #{business.isDeleted},</if>
+            <if test="business.deleted != null">is_deleted = #{business.isDeleted},</if>
             <if test="business.businessAddress != null">business_address = #{business.businessAddress},</if>
             <if test="business.businessExplain != null">business_explain = #{business.businessExplain},</if>
             <if test="business.businessImg != null">business_img = #{business.businessImg},</if>
@@ -59,9 +125,9 @@
             <if test="business.orderTypeId != null">order_type_id = #{business.orderTypeId},</if>
             <if test="business.remarks != null">remarks = #{business.remarks},</if>
             <if test="business.startPrice != null">start_price = #{business.startPrice},</if>
-            <if test="business.businessOwner.id != null">user_id = #{business.businessOwner.id},</if>
+            <if test="business.businessOwner!=null and business.businessOwner.id!=null">user_id = #{business.businessOwner.id},</if>
         </set>
-        WHERE id = #{id}
+        where id = #{id}
     </update>
 
     <update id="patchBusinessById">
@@ -69,7 +135,7 @@
         SET
             update_time = #{business.updateTime},
             updater = #{business.updater},
-            is_deleted = #{business.isDeleted},
+            is_deleted = #{business.deleted},
             business_address = #{business.businessAddress},
             business_explain = #{business.businessExplain},
             business_img = #{business.businessImg},
