@@ -1,9 +1,11 @@
 package cn.edu.tju.elm.controller;
 
+import cn.edu.tju.core.model.User;
 import cn.edu.tju.elm.model.Cart;
 //import cn.edu.tju.elb.service.CartItemService;
 import cn.edu.tju.core.model.HttpResult;
 import cn.edu.tju.core.security.service.UserService;
+import cn.edu.tju.elm.service.CartService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,12 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class CartController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private CartService cartService;
 
-//    @Autowired
-//    private CartItemService cartItemService;
 
     @PostMapping("/carts")
     public HttpResult<Cart>  addCartItem(@RequestBody Cart cart){
-        return null;
+        User me =  userService.getUserWithAuthorities().get();
+        cart.setCreator(me.getId());
+        cart.setUpdater(me.getId());
+        Long id = cartService.addCartItem(cart);
+        cart.setId(id);
+        return HttpResult.success(cart);
     }
 }
