@@ -3,6 +3,31 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.tju.elm.mappers.BusinessMapper">
 
+
+
+    <!-- 1. 权限结果映射 -->
+    <resultMap id="authorityResultMap" type="cn.edu.tju.core.model.Authority">
+        <id property="name" column="authority_name"/>
+    </resultMap>
+
+    <!-- 2. 用户结果映射 -->
+    <resultMap id="userResultMap" type="cn.edu.tju.core.model.User">
+        <id property="id" column="u_id"/>
+        <result property="createTime" column="u_create_time"/>
+        <result property="creator" column="u_creator"/>
+        <result property="deleted" column="u_is_deleted" typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result property="updateTime" column="u_update_time"/>
+        <result property="updater" column="u_updater"/>
+        <result property="activated" column="activated" typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result property="password" column="password"/>
+        <result property="username" column="username"/>
+
+        <!-- 3. 把权限集合封装到 authorities -->
+        <collection property="authorities"
+                    ofType="cn.edu.tju.core.model.Authority"
+                    resultMap="authorityResultMap"/>
+    </resultMap>
+
     <resultMap id="businessResultMap" type="cn.edu.tju.elm.model.Business">
         <id property="id" column="b_id"/>
         <result property="createTime" column="b_create_time"/>
@@ -18,7 +43,7 @@
         <result property="orderTypeId" column="order_type_id"/>
         <result property="remarks" column="remarks"/>
         <result property="startPrice" column="start_price"/>
-        <association property="businessOwner" javaType="cn.edu.tju.core.model.User">
+        <association property="businessOwner" resultMap="userResultMap">
             <id property="id" column="u_id"/>
             <result property="createTime" column="u_create_time"/>
             <result property="creator" column="u_creator"/>
@@ -59,7 +84,7 @@
         from business b join users u on b.user_id = u.id
     </select>
 
-    <insert id="addBusiness">
+    <insert id="addBusiness" useGeneratedKeys="true" keyProperty="id">
         insert into business(
             create_time,
             creator,
@@ -106,9 +131,16 @@
             u.updater as u_updater,
             u.activated,
             u.password,
-            u.username
-        from business b join users u on b.user_id = u.id
+            u.username,
+            ua.authority_name
+        from business b
+        join users u on b.user_id = u.id
+        join user_authority ua on u.id = ua.user_id
         where #{id}=b.id
+    </select>
+
+    <select id="getAllids" resultType="java.lang.Long">
+        select id from business
     </select>
 
     <update id="editBusinessById">
@@ -116,7 +148,7 @@
         <set>
             <if test="business.updateTime != null">update_time = #{business.updateTime},</if>
             <if test="business.updater != null">updater = #{business.updater},</if>
-            <if test="business.deleted != null">is_deleted = #{business.isDeleted},</if>
+            <if test="business.deleted != null">is_deleted = #{business.deleted},</if>
             <if test="business.businessAddress != null">business_address = #{business.businessAddress},</if>
             <if test="business.businessExplain != null">business_explain = #{business.businessExplain},</if>
             <if test="business.businessImg != null">business_img = #{business.businessImg},</if>
@@ -149,7 +181,7 @@
     </update>
 
     <delete id="dropBusinessById">
-        delete from business where id=#{id}
+        update business set is_deleted = true where id = #{id}
     </delete>
 
 </mapper>

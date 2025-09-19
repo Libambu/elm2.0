@@ -32,7 +32,7 @@ public class BusinessController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public HttpResult<Business> addBusiness(@RequestBody Business business){
         businessService.addBusiness(business);
-        return HttpResult.success();
+        return HttpResult.success(business);
     }
 
     @GetMapping("/{id}")
@@ -47,18 +47,20 @@ public class BusinessController {
     @PutMapping("/{id}")
     public HttpResult<Business> updateBusiness(@PathVariable("id") Long id, @RequestBody Business business){
         businessService.editBusinessById(id,business);
-        return HttpResult.success();
+        return HttpResult.success(business);
     }
 
     @PatchMapping("/{id}")
     public HttpResult<Business> patchBusiness(@PathVariable("id") Long id, @RequestBody Business business){
         businessService.patchBusinessById(id,business);
-        return HttpResult.success();
+        return HttpResult.success(business);
     }
 
     @DeleteMapping("/{id}")
     public HttpResult<Business> deleteBusiness(@PathVariable("id") Long id){
+        Business business=businessService.getBusinessById(id);
         businessService.dropBusinessById(id);
-        return HttpResult.success();
+        business.setDeleted(true);
+        return HttpResult.success(business);
     }
 }

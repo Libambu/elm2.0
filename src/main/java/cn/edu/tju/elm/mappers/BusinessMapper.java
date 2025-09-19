@@ -21,4 +21,6 @@ public interface BusinessMapper {
     int patchBusinessById(@Param("id") Long id, @Param("business") Business business);
 
     int dropBusinessById(Long id);
+
+    List<Long> getAllids();
 }
