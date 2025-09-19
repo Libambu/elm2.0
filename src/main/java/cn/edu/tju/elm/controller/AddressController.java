@@ -28,6 +28,6 @@ public class AddressController {
     @PostMapping("/addresses")
     public HttpResult<DeliveryAddress> addDeliveryAddress(@RequestBody DeliveryAddress deliveryAddress) {
         addressService.addAddress(deliveryAddress);
-        return HttpResult.success();
+        return HttpResult.success(deliveryAddress);
     }
 }
