@@ -40,13 +40,18 @@ public class UserModelDetailsService implements UserDetailsService {
       log.debug("Authenticating user '{}'", login);
       log.info("Authenticating user '{}'", login);
       String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-      return userMapper.findOneWithAuthoritiesByUsername(lowercaseLogin)
-              .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-              .orElseThrow(() -> {                                    // ← 代码块
-                 String msg = "User " + lowercaseLogin + " was not found in the database";
-                 log.warn(msg);                                      // ← 手动打印
-                 return new UsernameNotFoundException(msg);
-              });
+      try{
+         return userMapper.findOneWithAuthoritiesByUsernamemyelm(lowercaseLogin)
+                 .map(user -> createSpringSecurityUser(lowercaseLogin, user))
+                 .orElseThrow(() -> {                                    // ← 代码块
+                    String msg = "User " + lowercaseLogin + " was not found in the database";
+                    log.warn(msg);                                      // ← 手动打印
+                    return new UsernameNotFoundException(msg);
+                 });
+      }catch (Exception e){
+         e.printStackTrace();
+      }
+      return null;
    }
 
    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {

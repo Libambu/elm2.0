@@ -79,7 +79,7 @@ public class UserRestController {
               break;
           }
       }
-      User updateUser = userMapper.findOneWithAuthoritiesByUsername(loginDto.getUsername()).get();
+      User updateUser = userMapper.findOneWithAuthoritiesByUsernamemyelm(loginDto.getUsername()).get();
       //userModelDetailsService.loadUserByUsername(loginDto.getUsername());
       if (me.getUsername().equals(loginDto.getUsername()) || isAdmin ) {
          updateUser.setPassword(SecurityUtils.BCryptPasswordEncode(loginDto.getPassword()));

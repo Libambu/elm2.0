@@ -9,6 +9,8 @@ import cn.edu.tju.core.model.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -19,10 +21,11 @@ public class UserService {
 
    @Transactional(readOnly = true)
    public Optional<User> getUserWithAuthorities() {
-      return SecurityUtils.getCurrentUsername().flatMap(userMapper::findOneWithAuthoritiesByUsername);
+      return SecurityUtils.getCurrentUsername().flatMap(userMapper::findOneWithAuthoritiesByUsernamemyelm);
    }
 
    public void addUser(User user) {
+      user.setId(new Random(5).nextLong());
       userMapper.save(user);
    }
 

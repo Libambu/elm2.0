@@ -14,4 +14,5 @@ public class FoodDto extends BaseEntity {
     private BigDecimal foodPrice;
     private Long businessId;
     private String remarks;
+    private Boolean isDeleted;
 }

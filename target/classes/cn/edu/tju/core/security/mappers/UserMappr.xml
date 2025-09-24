@@ -55,10 +55,10 @@
         <id property="id" column="id"/>
         <result property="createTime" column="create_time"/>
         <result property="creator" column="creator"/>
-        <result property="deleted" column="is_deleted" typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result property="deleted" column="is_deleted" />
         <result property="updateTime" column="update_time"/>
         <result property="updater" column="updater"/>
-        <result property="activated" column="activated" typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result property="activated" column="activated"/>
         <result property="password" column="password"/>
         <result property="username" column="username"/>
 
@@ -70,6 +70,30 @@
 
     <!-- 4. 根据用户名查用户（含权限） -->
     <select id="findOneWithAuthoritiesByUsername" resultMap="userResultMap">
+
+    </select>
+
+
+
+    <!-- 4. 根据用户名查用户（含权限） -->
+    <select id="findOneWithAuthoritiesByUsernamemyelm" resultMap="userResultMap">
+        SELECT u.id,
+               u.create_time,
+               u.creator,
+               u.is_deleted ,
+               u.update_time,
+               u.updater,
+               u.activated,
+               u.password,
+               u.username,
+               a.name AS authority_name
+        FROM users u
+                 LEFT JOIN user_authority ua ON u.id = ua.user_id
+                 LEFT JOIN authority a ON ua.authority_name = a.name
+        WHERE u.username = #{username}
+    </select>
+
+    <select id="getUserById" resultMap="userResultMap">
         SELECT u.id,
                u.create_time,
                u.creator,
@@ -83,7 +107,7 @@
         FROM users u
                  LEFT JOIN user_authority ua ON u.id = ua.user_id
                  LEFT JOIN authority a ON ua.authority_name = a.name
-        WHERE u.username = #{username}
+        WHERE u.id = #{customerId}
     </select>
 
 </mapper>

@@ -13,11 +13,13 @@ import java.util.Optional;
 public interface UserMapper {
 
 
-    Optional<User> findOneWithAuthoritiesByUsername(String username);
+    Optional<User> findOneWithAuthoritiesByUsernamemyelm(String username);
 
     void save(User user);
 
     List<User> findAll();
 
     void update(User user);
+
+    User getUserById(Long customerId);
 }

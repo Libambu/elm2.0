@@ -9,5 +9,6 @@ public class CartDto extends BaseEntity {
     private Long customerId;
     private Long businessId;
     private Integer quantity;
+    private Boolean isDeleted;
 
 }

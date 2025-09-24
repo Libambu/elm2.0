@@ -3,6 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.tju.elm.mappers.OrderMapper">
 
+    <insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into orders values (null,#{createTime},#{creator},#{deleted},#{updateTime},#{updater},#{orderDate},#{orderState}
+                                  ,#{orderTotal},#{business.id},#{customer.id},#{deliveryAddress.id})
+    </insert>
+    <insert id="insertDetil" useGeneratedKeys="true" keyProperty="id">
+        insert into orderdetailet values (null,#{createTime},#{creator},#{deleted},#{updateTime},#{updater},#{quantity},#{foodId},#{orderId})
+    </insert>
+
     <select id="getDetailIdsById" resultType="java.lang.Integer">
         select id from orderdetailet where order_id = #{orderId}
     </select>
@@ -12,6 +20,14 @@
         <foreach collection="ids" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>
+    </select>
+
+    <select id="getOrderDto" resultType="cn.edu.tju.elm.dto.OrderDto">
+        select * from orders where id = #{id}
+    </select>
+
+    <select id="getAllIdByUserid" resultType="java.lang.Long">
+        select id from orders where customer_id = #{userId}
     </select>
 
 </mapper>

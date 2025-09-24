@@ -26,6 +26,7 @@ public class AddressServiceImpl implements AddressService {
         deliveryAddress.setCreateTime(LocalDateTime.now());
         deliveryAddress.setUpdater(me.getId());
         deliveryAddress.setUpdateTime(LocalDateTime.now());
+        deliveryAddress.setCustomer(me);
         return addressMapper.addAddress(deliveryAddress);
     }
 }

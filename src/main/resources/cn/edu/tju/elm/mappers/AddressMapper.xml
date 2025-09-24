@@ -29,4 +29,8 @@
         )
     </insert>
 
+    <select id="getAddressDtoByid" resultType="cn.edu.tju.elm.dto.AddressDto">
+        select * from delivery_address where id = #{addressId}
+    </select>
+
 </mapper>
