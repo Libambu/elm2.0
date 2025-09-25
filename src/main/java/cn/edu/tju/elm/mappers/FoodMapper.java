@@ -13,4 +13,7 @@ public interface FoodMapper {
     Food getFoodByIdAndBus(Integer id, Long businessId);
 
     void insert(FoodDto foodDto);
+
+    @Select("select creator from food where id = #{foodId}")
+    Long getBIdByFiod(Long foodId);
 }

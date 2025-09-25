@@ -5,6 +5,7 @@ import cn.edu.tju.elm.dto.OrderDto;
 import cn.edu.tju.elm.model.Order;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface OrderMapper {
 
 
     void insertDetil(OrderDetailetDto orderDetailetDto);
+
+    @Select("select customer_id from orders where id = #{id}")
+    Long getUserIdById(Long id);
 }

@@ -1,6 +1,7 @@
 package cn.edu.tju.elm.controller;
 
 import cn.edu.tju.core.model.User;
+import cn.edu.tju.elm.mappers.FoodMapper;
 import cn.edu.tju.elm.model.Food;
 import cn.edu.tju.core.model.HttpResult;
 import cn.edu.tju.core.security.service.UserService;
@@ -9,10 +10,13 @@ import cn.edu.tju.elm.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/foods")
@@ -25,6 +29,8 @@ public class FoodController {
     private OrderService orderService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private FoodMapper foodMapper;
 
 
     @GetMapping("/{id}")
@@ -55,5 +61,15 @@ public class FoodController {
         Long foodId = foodService.addFood(food);
         food.setId(foodId);
         return HttpResult.success(food);
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity change(@PathVariable("id") Long foodId){
+        User me =  userService.getUserWithAuthorities().get();
+        Long createor = foodMapper.getBIdByFiod(foodId);
+        if(createor.equals(me.getId())){
+            return null;
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("code", 403, "msg", "无权访问"));
     }
 }
