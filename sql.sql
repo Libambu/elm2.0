@@ -172,11 +172,11 @@ create table user_authority
         foreign key (user_id) references users (id)
 );
 
-INSERT INTO elb.authority (name) VALUES ('ADMIN');
+INSERT INTO myelb.authority (name) VALUES ('ADMIN');
 
-INSERT INTO elb.users (id, create_time, creator, is_deleted, update_time, updater, activated, password, username) VALUES (1, '2025-09-17 16:08:52.000000', 0, false, '2025-09-20 10:52:57.724621', 1, true,
-        '$2a$10$ZNSjLD6NK7dVZonkPK11QOOmSNrykc80LZbmKgOm6ImHbiu2QQx4K', 'admin');
+INSERT INTO myelb.users (id, create_time, creator, is_deleted, update_time, updater, activated, password, username) VALUES (1, '2025-09-17 16:08:52.000000', 0, false, '2025-09-20 10:52:57.724621', 1, true,
+                                                                                                                            '$2a$10$ZNSjLD6NK7dVZonkPK11QOOmSNrykc80LZbmKgOm6ImHbiu2QQx4K', 'admin');
 
-INSERT INTO elb.user_authority (user_id, authority_name)
+INSERT INTO myelb.user_authority (user_id, authority_name)
 VALUES (1, 'ADMIN');
 
