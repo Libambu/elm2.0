@@ -10,12 +10,8 @@
 ## 项目启动
 - 当前项目仅依赖 jdk(version>=17) 即可正常运行。
 - 
-- target/myapp-1.0.jar已经有可以运行的jar包
+- 进入项目目录，运行mvn package进行打包
 - 
-- 直接运行即可Run: java -jar target/myapp-1.0.jar （windows上将/换成\）
-- 
-- 若jar包无法使用，重新打包mvn clean package
-- 
-- Run: java -jar target/myapp-1.0.jar （windows上将/换成\）
+- 打包完成后，运行: java -jar target/myapp-1.0.jar （windows上将/换成\）
 
 
