@@ -1,7 +1,7 @@
 
 ## 项目部署
 
-- 当前数据库使用内置mysql,修改application.properties数据库连接信息
+- 数据库使用mysql,修改application.properties数据库连接信息
 
 - 运行elm2.0/sql.sql脚本构建数据库
 
